@@ -31,5 +31,7 @@ namespace ContactManager.Models
         public string Organization { get; set; }
 
         public DateTime DateCreated { get; set; }
+
+        public string Slug => FirstName?.Replace(' ', '-').ToLower() + '-' + LastName?.Replace(' ', '-');
     }
 }

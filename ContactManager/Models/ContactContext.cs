@@ -25,7 +25,8 @@ namespace ContactManager.Models
                     Phone = "541-534-4923",
                     Email = "john.doe@yahoo.com",
                     CategoryId = 1,
-                    Organization = ""
+                    Organization = "test",
+                    DateCreated = DateTime.Parse("09/23/2021 17:10:0")
                 },
                 new Contact
                 {
@@ -35,7 +36,8 @@ namespace ContactManager.Models
                     Phone = "316-421-4521",
                     Email = "jsmith@gmail.com",
                     CategoryId = 2,
-                    Organization = ""
+                    Organization = "Random",
+                    DateCreated = DateTime.Parse("09/23/2021 17:10:0")
                 }
             );
 

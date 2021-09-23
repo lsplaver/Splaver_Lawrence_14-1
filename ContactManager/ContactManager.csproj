@@ -5,6 +5,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Migrations\20210923200307_Initial.cs" />
+    <Compile Remove="Migrations\20210923200307_Initial.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="wwwroot\lib\" />
   </ItemGroup>
 
