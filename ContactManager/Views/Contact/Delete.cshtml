@@ -4,11 +4,13 @@
 }
 
 <h2>Delete Contact</h2>
-<p>Do you really want to delete <span class="font-weight-bold">@Model.FirstName + " " + @Model.LastName</span></p>
+<p>Do you really want to delete <span class="font-weight-bold">@Model.FirstName @Model.LastName</span></p>
 
 <form asp-action="Delete" method="post">
     <input type="hidden" asp-for="ContactId" />
 
     <button type="submit" class="btn btn-dark">Yes</button>
-    <a asp-controller="Contact" asp-action="Details" class="btn btn-dark">No</a>
+    <a asp-controller="Contact" asp-action="Details" class="btn btn-dark"
+       asp-route-id="@Model.ContactId"
+       asp-route-slug="@Model.Slug">No</a>
 </form>

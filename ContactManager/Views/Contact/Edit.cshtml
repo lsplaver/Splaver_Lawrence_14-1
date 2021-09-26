@@ -47,16 +47,18 @@
 
     <input type="hidden" asp-for="ContactId" />
 
-    <input type="hidden" asp-for="DateCreated" />
-
     <button type="submit" class="btn btn-dark">@ViewBag.Action</button>
 
     @if (ViewBag.Action == "Add")
     {
+        <input type="datetime-local" class="text-hide" asp-for="DateCreated.Date" />
+
         <a asp-controller="Home" asp-action="Index" class="btn btn-dark">Cancel</a>
     }
     else
     {
-        <a asp-controller="Contact" asp-action="Details" class="btn btn-dark">Cancel</a>
+        <a asp-controller="Contact" asp-action="Details" class="btn btn-dark"
+           asp-route-id="@Model.ContactId"
+           asp-route-slug="@Model.Slug">Cancel</a>
     }
 </form>

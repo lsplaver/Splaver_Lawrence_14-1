@@ -59,7 +59,7 @@ namespace ContactManager.Controllers
         }
 
         [HttpGet]
-        public IActionResult Detail(int id)
+        public IActionResult Details(int id)
         {
             ViewBag.Action = "Detail";
             ViewBag.Categories = context.Categories.OrderBy(ca => ca.Name).ToList();

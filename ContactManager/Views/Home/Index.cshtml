@@ -12,7 +12,6 @@
             <th>Phone</th>
             <th>Email</th>
             <th>Category</th>
-            <th></th>
         </tr>
     </thead>
     <tbody>
@@ -20,12 +19,12 @@
         {
             <tr>
                 <td>
-                    <a asp-controller="Contact" asp-action="Detail"
+                    <a asp-controller="Contact" asp-action="Details"
                        asp-route-id="@contact.ContactId"
                        asp-route-slug="@contact.Slug">@contact.FirstName</a>
                 </td>
                 <td>
-                    <a asp-controller="Contact" asp-action="Detail"
+                    <a asp-controller="Contact" asp-action="Details"
                        asp-route-id="@contact.ContactId"
                        asp-route-slug="@contact.Slug">@contact.LastName</a>
                 </td>

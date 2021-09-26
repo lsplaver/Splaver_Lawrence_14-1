@@ -1,0 +1,46 @@
+﻿@model Contact
+@{ 
+    ViewBag.Title = "Contact Details";
+}
+
+<h2>@ViewBag.Title</h2>
+
+<table class="table">
+    <tbody>
+        <tr>
+            <td>Name:</td>
+            <td>@Model.FirstName @Model.LastName</td>
+        </tr>
+        <tr>
+            <td>Phone:</td>
+            <td>@Model.Phone</td>
+        </tr>
+        <tr>
+            <td>Email:</td>
+            <td>@Model.Email</td>
+        </tr>
+        <tr>
+            <td>Category:</td>
+            <td>@Model.Category.Name</td>
+        </tr>
+        <tr>
+            <td>Organization:</td>
+            <td>@Model.Organization</td>
+        </tr>
+        <tr>
+            <td>Date added:</td>
+            <td>@Model.DateCreated</td>
+        </tr>
+        <tr>
+                <td>
+                    <a asp-controller="Contact" asp-action="Edit"
+                       asp-route-id="@Model.ContactId"
+                       asp-route-slug="@Model.Slug" class="btn btn-dark">Edit</a>
+                <a asp-controller="Contact" asp-action="Delete"
+                   asp-route-id="@Model.ContactId"
+                   asp-route-slug="@Model.Slug" class="btn btn-dark">Delete</a>
+                <a asp-controller="Home" asp-action="Index" class="btn btn-dark">Home</a>
+            </td>
+        </tr>
+    </tbody>
+</table>
