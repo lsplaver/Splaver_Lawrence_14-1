@@ -22,6 +22,9 @@ namespace ContactManager
         {
             services.AddControllersWithViews();
 
+            services.AddTransient<IContactManagerUnitOfWork, ContactManagerUnitOfWork>();
+            services.AddTransient(typeof(IRepository<>), typeof(Repository<>));
+
             services.AddRouting(options =>
             {
                 options.LowercaseUrls = true;

@@ -7,20 +7,22 @@ namespace ContactManager.Controllers
 {
     public class HomeController : Controller
     {
-        private ContactContext context { get; set; }
+        private IContactManagerUnitOfWork data { get; set; }
 
-        public HomeController(ContactContext ctx)
+        public HomeController(IContactManagerUnitOfWork unit)
         {
-            context = ctx;
+            data = unit;
         }
 
         public IActionResult Index()
         {
-            var contacts = context.Contacts
-                .Include(c => c.Category)
-                .OrderBy(c => c.LastName)
-                .ToList();
-            return View(contacts);
+            var contactOptions = new QueryOptions<Contact>
+            {
+                Includes = "Category",
+                OrderBy = c => c.LastName
+            };
+
+            return View(data.Contacts.List(contactOptions));
         }
     }
 }

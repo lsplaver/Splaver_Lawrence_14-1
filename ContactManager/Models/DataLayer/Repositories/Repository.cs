@@ -31,6 +31,11 @@ namespace ContactManager.Models
                 query = query.Where(options.Where);
             }
 
+            if (options.HasOrderBy)
+            {
+                query = query.OrderBy(options.OrderBy);
+            }
+
             return query.ToList();
         }
 

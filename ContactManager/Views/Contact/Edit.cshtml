@@ -51,7 +51,7 @@
 
     @if (ViewBag.Action == "Add")
     {
-        <input type="datetime-local" class="text-hide" asp-for="DateCreated" />
+        <input type="hidden" class="text-hide" asp-for="DateCreated" />
 
         <a asp-controller="Home" asp-action="Index" class="btn btn-dark">Cancel</a>
     }
