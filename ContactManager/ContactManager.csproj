@@ -10,6 +10,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Models\DataLayer\Repositories\" />
+    <Folder Include="Models\DTOs\" />
+    <Folder Include="Models\Grid\" />
+    <Folder Include="Models\ExtensionMethods\" />
+    <Folder Include="Models\Validation\" />
+    <Folder Include="Models\ViewModels\" />
     <Folder Include="wwwroot\lib\" />
   </ItemGroup>
 
