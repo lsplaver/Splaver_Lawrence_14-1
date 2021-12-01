@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
-using ContactManager.Models.Validation;
 
 namespace ContactManager.Models
 {

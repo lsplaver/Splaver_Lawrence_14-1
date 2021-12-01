@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace ContactManager.Models.Validation
+namespace ContactManager.Models
 {
     public class CustomEmailFormatAttribute : ValidationAttribute
     {
