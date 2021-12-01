@@ -9,51 +9,49 @@ namespace ContactManager.Controllers
 {
     public class ContactController : Controller
     {
-        private ContactContext context { get; set; }
+        private IContactManagerUnitOfWork data { get; set; }
 
-        public ContactController(ContactContext ctx)
+        public ContactController(IContactManagerUnitOfWork unit)
         {
-            context = ctx;
+            data = unit;
         }
 
         [HttpGet]
         public IActionResult Add()
         {
-            ViewBag.Action = "Add";
-            ViewBag.Categories = context.Categories.OrderBy(ca => ca.Name).ToList();
+            this.LoadViewBag("Add");
             return View("Edit", new Contact());
         }
 
         [HttpGet]
         public IActionResult Edit(int id)
         {
-            ViewBag.Action = "Edit";
-            ViewBag.Categories = context.Categories.OrderBy(ca => ca.Name).ToList();
-            var contact = context.Contacts.Find(id);
+            this.LoadViewBag("Edit");
+            var contact = this.GetContact(id);
             return View(contact);
         }
 
         [HttpPost]
         public IActionResult Edit(Contact contact)
         {
+            string operation = contact.ContactId == 0 ? "Add" : "Edit";
             if (ModelState.IsValid)
             {
                 if (contact.ContactId == 0)
                 {
-                    context.Contacts.Add(contact);
+                    data.Contacts.Insert(contact);
                 }
                 else
                 {
-                    context.Contacts.Update(contact);
+                    data.Contacts.Update(contact);
                 }
 
-                context.SaveChanges();
+                data.Contacts.Save();
                 return RedirectToAction("Index", "Home");
             }    
             else
             {
-                ViewBag.Action = (contact.ContactId == 0) ? "Add" : "Edit";
-                ViewBag.Categories = context.Categories.OrderBy(ca => ca.Name).ToList();
+                this.LoadViewBag(operation);
                 return View(contact);
             }
         }
@@ -61,25 +59,46 @@ namespace ContactManager.Controllers
         [HttpGet]
         public IActionResult Details(int id)
         {
-            ViewBag.Action = "Detail";
-            ViewBag.Categories = context.Categories.OrderBy(ca => ca.Name).ToList();
-            var contact = context.Contacts.Find(id);
+            this.LoadViewBag("Detail");
+            var contact = this.GetContact(id);
             return View(contact);
         }
 
         [HttpGet]
         public IActionResult Delete(int id)
         {
-            var contact = context.Contacts.Find(id);
+            var contact = this.GetContact(id);
             return View(contact);
         }
 
         [HttpPost]
         public IActionResult Delete(Contact contact)
         {
-            context.Contacts.Remove(contact);
-            context.SaveChanges();
+            contact = data.Contacts.Get(contact.ContactId);
+
+            data.Contacts.Delete(contact);
+            data.Contacts.Save();
             return RedirectToAction("Index", "Home");
+        }
+
+        private Contact GetContact(int id)
+        {
+            var contactOptions = new QueryOptions<Contact>
+            {
+                Includes = "Category",
+                Where = c => c.ContactId == id
+            };
+
+            return data.Contacts.Get(contactOptions);
+        }
+
+        private void LoadViewBag(string operation)
+        {
+            ViewBag.Action = operation;
+            ViewBag.Categories = data.Categories.List(new QueryOptions<Category>
+            {
+                OrderBy = ca => ca.Name
+            });
         }
     }
 }

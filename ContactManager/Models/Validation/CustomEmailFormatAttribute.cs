@@ -19,7 +19,7 @@ namespace ContactManager.Models
             {
                 string stringToCheck = value.ToString();
                 bool isCorrectFormat = false;
-                isCorrectFormat = Regex.IsMatch(stringToCheck, "^*" + Regex.Escape("@") + "*" + Regex.Escape(".") + "*");
+                isCorrectFormat = Regex.IsMatch(stringToCheck, "^[a-zA-Z0-9!-_$&.]*" + Regex.Escape("@") + "[a-zA-Z0-9!-_$&.]*" + Regex.Escape(".") + "[a-zA-Z0-9!-_$&.]*$");
                 if (isCorrectFormat)
                 {
                     return ValidationResult.Success;
