@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
+using ContactManager.Models.Validation;
 
 namespace ContactManager.Models
 {
@@ -17,12 +18,13 @@ namespace ContactManager.Models
         public string LastName { get; set; }
 
         [Required(ErrorMessage = "Please enter a phone number.")]
-        [Phone(ErrorMessage = "Not a valid phone number.")]
-        public /*PhoneAttribute*/ string Phone { get; set; }
+        [StringLength(maximumLength: 14, MinimumLength = 14, ErrorMessage = "Phone number must be 14 characters long including parenthesis and dashes.")]
+        [CustomPhoneFormat(ErrorMessage = "Phone number must be in the '(123)-456-7890' format including parenthesis and dashes.")]
+        public string Phone { get; set; }
 
         [Required(ErrorMessage = "Please enter an email address.")]
-        [EmailAddress(ErrorMessage = "Not a valid email address.")]
-        public /*EmailAddressAttribute*/ string Email { get; set; }
+        [CustomEmailFormat(ErrorMessage = "Email must e in the format of 'name@example.com'.")]
+        public string Email { get; set; }
 
         [Required(ErrorMessage = "Please enter a category.")]
         public int? CategoryId { get; set; }
