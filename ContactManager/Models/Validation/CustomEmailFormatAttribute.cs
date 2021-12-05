@@ -19,13 +19,13 @@ namespace ContactManager.Models
             {
                 string stringToCheck = value.ToString();
                 bool isCorrectFormat = false;
-                isCorrectFormat = Regex.IsMatch(stringToCheck, "^[a-zA-Z0-9!-_$&.]*" + Regex.Escape("@") + "[a-zA-Z0-9!-_$&.]*" + Regex.Escape(".") + "[a-zA-Z0-9!-_$&.]*$");
+                isCorrectFormat = Regex.IsMatch(stringToCheck, "^[a-zA-Z0-9!-_$&.].*" + Regex.Escape("@") + "[a-zA-Z0-9!-_$&.].*" + Regex.Escape(".") + "[a-zA-Z0-9!-_$&.].*$");
                 if (isCorrectFormat)
                 {
                     return ValidationResult.Success;
                 }
             }
-            string message = base.ErrorMessage ?? $"{validationContext.DisplayName} must be in the format of 'name@example.com'";
+            string message = base.ErrorMessage ?? $"Email must be in the format of 'name@example.com'";
             return new ValidationResult(message);
         }
     }

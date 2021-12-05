@@ -26,7 +26,7 @@ namespace ContactManager.Models
                     return ValidationResult.Success;
                 }
             }
-            string message = base.ErrorMessage ?? $"{validationContext.DisplayName} must be in the (123)-456-7890 format.";
+            string message = base.ErrorMessage ?? "Phone must be in the (123)-456-7890 format.";
             return new ValidationResult(message);
         }
     }
