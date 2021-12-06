@@ -20,7 +20,6 @@ namespace ContactManager.Controllers
         public IActionResult Add()
         {
             this.LoadViewBag("Add");
-            //return View("Edit", new Contact());
             return RedirectToAction("Edit", new Contact());
         }
 

@@ -12,9 +12,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Models\DTOs\" />
-    <Folder Include="Models\Grid\" />
-    <Folder Include="Models\ExtensionMethods\" />
     <Folder Include="wwwroot\lib\" />
   </ItemGroup>
 

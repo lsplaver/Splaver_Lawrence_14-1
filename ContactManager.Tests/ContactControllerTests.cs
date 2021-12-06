@@ -13,37 +13,11 @@ namespace ContactManager.Tests
 {
     public class ContactControllerTests
     {
-        //public List<Contact> Contacts = new List<Contact>
-        //{
-        //    new Contact
-        //    {
-        //        ContactId = 1,
-        //        FirstName = "Afirstname",
-        //        LastName = "Alastname",
-        //        CategoryId = 1,
-        //        DateCreated = DateTime.Now,
-        //        Email = "name@example.com",
-        //        Phone = "(123)-456-7890",
-        //        Organization = null
-        //    },
-        //    new Contact
-        //    {
-        //        ContactId = 2,
-        //        FirstName = "John",
-        //        LastName = "Doe",
-        //        CategoryId = 2,
-        //        DateCreated = DateTime.Now,
-        //        Email = "random@dpe.com",
-        //        Phone = "(987)-654-3210",
-        //        Organization = "An Organization"
-        //    }
-        //};
-
         private string insertMessage = "";
         private string updateMessage = "";
         private string deleteMessage = "";
         private string saveMessage = "";
-        // 8/12 Working
+
         public IContactManagerUnitOfWork GetUnitOfWork()
         {
             var contactRep = new Mock<IRepository<Contact>>();
@@ -65,7 +39,7 @@ namespace ContactManager.Tests
             return unit.Object;
         }
 
-        // Working
+
         [Fact]
         public void Add_GET_ReturnViewBagActionValue()
         { 
@@ -73,15 +47,11 @@ namespace ContactManager.Tests
             var controller = new ContactController(unit);
             
             var result = controller.ViewBag.Action = "Add";
-            //var vr = result as ViewResult;
-            //Assert.True(vr.ViewData.ContainsKey("Action"));
-            //var action = vr.ViewData["Action"];
             string action = controller.ViewBag.Action;
 
             Assert.Equal("Add", action);
         }
 
-        // Not Working
         [Fact]
         public void Add_GET_ReturnViewBagCategoriesValue()
         {
@@ -100,20 +70,17 @@ namespace ContactManager.Tests
             Assert.IsType<List<Category>>(categories);
         }
 
-        // Working
         [Fact]
         public void Add_GET_ReturnEditViewWithNewContact()
         {
             var unit = GetUnitOfWork();
             var controller = new ContactController(unit);
 
-            //var result = controller.Add(unit.Contacts.Get(new Contact));
             var result = controller.Add();
 
             Assert.IsType<RedirectToActionResult>(result);
         }
 
-        // Not working
         [Theory]
         [InlineData(1)]
         public void Edit_GET_ModelIsAContactModel(int id)
@@ -121,20 +88,11 @@ namespace ContactManager.Tests
             var unit = GetUnitOfWork();
             var controller = new ContactController(unit);
 
-            //Contact contact = new Contact();
-            //// var result = unit.Contacts.Get(id);
-            //// var result = controller.ViewData.Model as Contact;
             var result = ((ViewResult)controller.Edit(id)).ViewData.Model as Contact;
-            //var result = controller.Edit(id);
 
-            //Assert.Equal((Contact)contact, (Contact)result);
-            //var rep = new FakeContactRepository();
-
-            //var contact = rep.Get(id);
-            Assert.IsType<Contact>(result);//contact);
+            Assert.IsType<Contact>(result);
         }
 
-        // Working
         [Fact]
         public void Edit_GET_ReturnViewBagActionValue()
         {
@@ -148,7 +106,6 @@ namespace ContactManager.Tests
 
         }
 
-        // Working
         [Fact]
         public void Edit_GET_ReturnEditViewWithContact()
         {
@@ -290,10 +247,9 @@ namespace ContactManager.Tests
             var result = ((ViewResult)controller.Edit(1)).ViewData.Model as Contact;
 
             updateMessage = "";
-            //var contact = rep.Get(1);
-            result/*contact*/.Phone = "(123)-456-7890";
+            result.Phone = "(123)-456-7890";
 
-            unit.Contacts.Update(result);// contact);
+            unit.Contacts.Update(result);
             Mock.Verify();
             Assert.True(updateMessage == "");
         }
@@ -313,7 +269,6 @@ namespace ContactManager.Tests
 
         }
 
-        // Working
         [Fact]
         public void Details_GET_ReturnViewBagAction()
         {
@@ -326,7 +281,6 @@ namespace ContactManager.Tests
             Assert.Equal("Detail", action);
         }
 
-        // Working
         [Fact]
         public void Details_GET_ReturnDetailsView()
         {
@@ -349,7 +303,6 @@ namespace ContactManager.Tests
             Assert.IsType<Contact>(model);
         }
 
-        // Working
         [Fact]
         public void Delete_GET_ReturnDeleteView()
         {
@@ -361,7 +314,6 @@ namespace ContactManager.Tests
             Assert.IsType<ViewResult>(result);
         }
 
-        // Working
         [Fact]
         public void Edit_POST_ReturnRedirectToActionIndex()
         {
@@ -376,7 +328,6 @@ namespace ContactManager.Tests
             Assert.IsType<RedirectToActionResult>(result);
         }
 
-        // Working
         [Fact]
         public void Delete_POST_ReturnRedirectToActionIndex()
         {
@@ -391,7 +342,6 @@ namespace ContactManager.Tests
             Assert.IsType<RedirectToActionResult>(result);
         }
 
-        // Not working
         [Theory]
         [InlineData(1)]
         public void Delete_POST_ReturnContactObject(int id)
