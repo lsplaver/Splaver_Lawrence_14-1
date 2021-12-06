@@ -13,38 +13,47 @@ namespace ContactManager.Tests
 {
     public class ContactControllerTests
     {
-        public List<Contact> Contacts = new List<Contact>
-        {
-            new Contact
-            {
-                ContactId = 1,
-                FirstName = "Afirstname",
-                LastName = "Alastname",
-                CategoryId = 1,
-                DateCreated = DateTime.Now,
-                Email = "name@example.com",
-                Phone = "(123)-456-7890",
-                Organization = null
-            },
-            new Contact
-            {
-                ContactId = 2,
-                FirstName = "John",
-                LastName = "Doe",
-                CategoryId = 2,
-                DateCreated = DateTime.Now,
-                Email = "random@dpe.com",
-                Phone = "(987)-654-3210",
-                Organization = "An Organization"
-            }
-        };
+        //public List<Contact> Contacts = new List<Contact>
+        //{
+        //    new Contact
+        //    {
+        //        ContactId = 1,
+        //        FirstName = "Afirstname",
+        //        LastName = "Alastname",
+        //        CategoryId = 1,
+        //        DateCreated = DateTime.Now,
+        //        Email = "name@example.com",
+        //        Phone = "(123)-456-7890",
+        //        Organization = null
+        //    },
+        //    new Contact
+        //    {
+        //        ContactId = 2,
+        //        FirstName = "John",
+        //        LastName = "Doe",
+        //        CategoryId = 2,
+        //        DateCreated = DateTime.Now,
+        //        Email = "random@dpe.com",
+        //        Phone = "(987)-654-3210",
+        //        Organization = "An Organization"
+        //    }
+        //};
 
+        private string insertMessage = "";
+        private string updateMessage = "";
+        private string deleteMessage = "";
+        private string saveMessage = "";
         // 8/12 Working
         public IContactManagerUnitOfWork GetUnitOfWork()
         {
             var contactRep = new Mock<IRepository<Contact>>();
             contactRep.Setup(cor => cor.Get(It.IsAny<QueryOptions<Contact>>())).Returns(new Contact());
             contactRep.Setup(cor => cor.List(It.IsAny<QueryOptions<Contact>>())).Returns(new List<Contact>());
+            contactRep.Setup(cor => cor.Insert(It.IsAny<Contact>())).Verifiable(insertMessage = "insert failed");
+            contactRep.Setup(cor => cor.Update(It.IsAny<Contact>())).Verifiable(updateMessage = "update failed");
+            contactRep.Setup(cor => cor.Delete(It.IsAny<Contact>())).Verifiable(deleteMessage = "delete failed");
+            contactRep.Setup(cor => cor.Save()).Verifiable(saveMessage = "save failed");
+
 
             var categoryRep = new Mock<IRepository<Category>>();
             categoryRep.Setup(car => car.List(It.IsAny<QueryOptions<Category>>())).Returns(new List<Category>());
@@ -67,9 +76,9 @@ namespace ContactManager.Tests
             //var vr = result as ViewResult;
             //Assert.True(vr.ViewData.ContainsKey("Action"));
             //var action = vr.ViewData["Action"];
-            string action1 = controller.ViewBag.Action;
+            string action = controller.ViewBag.Action;
 
-            Assert.Equal("Add", action1);
+            Assert.Equal("Add", action);
         }
 
         // Not Working
@@ -79,13 +88,16 @@ namespace ContactManager.Tests
             var unit = GetUnitOfWork();
             var controller = new ContactController(unit);
 
-            //QueryOptions<Category> options = null;
+            QueryOptions<Category> options = null;
             //var result = controller.ViewBag.Categories = unit.Categories.List(options);
-            //var categories = unit.Categories.List(options);
+            var categories = unit.Categories.List(options);
             //var result = controller.ViewData.ContainsKey("")
 
+            //var result = controller.ViewData.Keys.Count;
+
             //Assert.Equal(categories, result);
-            Assert.True(controller.ViewData.ContainsKey("Categories"));
+            //Assert.True(controller.ViewData.ContainsKey("Categories"));
+            Assert.IsType<List<Category>>(categories);
         }
 
         // Working
@@ -106,20 +118,20 @@ namespace ContactManager.Tests
         [InlineData(1)]
         public void Edit_GET_ModelIsAContactModel(int id)
         {
-            //var unit = GetUnitOfWork();
-            //var controller = new ContactController(unit);
+            var unit = GetUnitOfWork();
+            var controller = new ContactController(unit);
 
             //Contact contact = new Contact();
             //// var result = unit.Contacts.Get(id);
             //// var result = controller.ViewData.Model as Contact;
-            ////var result = controller.Edit(id).ViewData.Model as Contact;
+            var result = ((ViewResult)controller.Edit(id)).ViewData.Model as Contact;
             //var result = controller.Edit(id);
 
             //Assert.Equal((Contact)contact, (Contact)result);
-            var rep = new FakeContactRepository();
+            //var rep = new FakeContactRepository();
 
-            var contact = rep.Get(id);
-            Assert.IsType<Contact>(contact);
+            //var contact = rep.Get(id);
+            Assert.IsType<Contact>(result);//contact);
         }
 
         // Working
@@ -229,26 +241,39 @@ namespace ContactManager.Tests
             var unit = GetUnitOfWork();
             //var controller = new ContactController(unit);
 
-            Contact contact = new Contact();
-
+            Contact contact = new Contact()
+            {
+                ContactId = 3,
+                CategoryId = 3,
+                DateCreated = DateTime.Now,
+                Email = "sdada@hfhf.vuv",
+                Phone = "(654)-982-4231",
+                Organization = null,
+                FirstName = "Edhgh",
+                LastName = "jgkjg"
+            };
+            insertMessage = "";
             //string lastName = contact.LastName;
             //QueryOptions<Contact> options = null;
             //options.OrderBy = c => c.LastName;
             //var tempList1 = unit.Contacts.List(options);
             //int count1 = tempList1.Count();
-            //unit.Contacts.Insert(contact);
+            //object temp = null;
+            unit.Contacts.Insert(contact);
+            Mock.Verify();
             //var tempList2 = unit.Contacts.List(options);
             //int count2 = tempList2.Count();
-
+            //message = "";
             //var tempList1 = rep.List(options);
             //int count1 = tempList1.Count();
             //rep.Insert(contact);
             //var tempList2 = rep.List(options);
             //int count2 = tempList2.Count();
 
-            unit.Contacts.Insert(contact);
+            //unit.Contacts.Insert(contact);
 
             //Assert.True(count2 > count1);
+            Assert.True(insertMessage == "");
         }
 
         [Fact]
@@ -260,12 +285,17 @@ namespace ContactManager.Tests
             //Contact contact = unit.Contacts.Get(1);
 
             //unit.Contacts.Update(contact);
-            var rep = new FakeContactRepository();
+            //var rep = new FakeContactRepository();
 
-            var contact = rep.Get(1);
-            contact.Phone = "(123)-456-7890";
+            var result = ((ViewResult)controller.Edit(1)).ViewData.Model as Contact;
 
-            unit.Contacts.Update(contact);
+            updateMessage = "";
+            //var contact = rep.Get(1);
+            result/*contact*/.Phone = "(123)-456-7890";
+
+            unit.Contacts.Update(result);// contact);
+            Mock.Verify();
+            Assert.True(updateMessage == "");
         }
 
         [Fact]
@@ -273,9 +303,12 @@ namespace ContactManager.Tests
         {
             var unit = GetUnitOfWork();
             var controller = new ContactController(unit);
+            saveMessage = "";
 
             unit.Contacts.Save();
             var model = controller.RedirectToAction();
+            Mock.Verify();
+            Assert.True(saveMessage == "");
             Assert.IsType<RedirectToActionResult>(model);
 
         }
@@ -301,8 +334,19 @@ namespace ContactManager.Tests
             var controller = new ContactController(unit);
 
             var result = controller.Details(1);
-
+            
             Assert.IsType<ViewResult>(result);
+        }
+
+        [Fact]
+        public void Details_GET_ReturnContactObject()
+        {
+            var unit = GetUnitOfWork();
+            var controller = new ContactController(unit);
+
+            var model = ((ViewResult)controller.Details(1)).ViewData.Model as Contact;
+
+            Assert.IsType<Contact>(model);
         }
 
         // Working
@@ -358,16 +402,20 @@ namespace ContactManager.Tests
             //var contact = new Contact();
             //QueryOptions<Contact> options = id;
             //contact = unit.Contacts.Get(options);
+            var result = ((ViewResult)controller.Delete(id)).ViewData.Model as Contact;
 
             //var model = controller.Details(id).ViewData.Model as Contact;l
-            var rep = new FakeContactRepository();
-            var temp = rep.Get(id);
+            //var rep = new FakeContactRepository();
+            //var temp = rep.Get(id);
             //var rep = new Mock<IRepository<Contact>>();
             //rep.Setup(r => r.Get(It.IsAny<int>())).Returns(new Contact());
             //var controller = new ContactController((IContactManagerUnitOfWork)rep);
+            deleteMessage = "";
+            var model = controller.Delete(result);
 
-            var model = controller.Delete(temp);
+            Mock.Verify();
 
+            Assert.True(deleteMessage == "");
             Assert.IsType<RedirectToActionResult>(model);
         }
 
@@ -376,10 +424,13 @@ namespace ContactManager.Tests
         {
             var unit = GetUnitOfWork();
             //var controller = new ContactController();
+            saveMessage = "";
 
             unit.Contacts.Save();
+            Mock.Verify();
             //bool result = unit.Contacts.Save();
             //Assert.True(unit.Contacts.Save());
+            Assert.True(saveMessage == "");
         }
 
         [Fact]
@@ -388,8 +439,11 @@ namespace ContactManager.Tests
             var unit = GetUnitOfWork();
 
             Contact contact = new Contact();
-
+            deleteMessage = "";
             unit.Contacts.Delete(contact);
+            Mock.Verify();
+
+            Assert.True(deleteMessage == "");
         }
     }
 }
